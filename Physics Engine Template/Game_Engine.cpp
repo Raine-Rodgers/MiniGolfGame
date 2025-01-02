@@ -30,7 +30,7 @@ void Game_Engine::initVariables() // basic initialization function
 	objectList = std::vector<Rigid_Body*>();
 	map1 = Map1();
 
-	rectangleA = new Rigid_Body(true, true, 1);
+	rectangleA = new Rigid_Body(false, true, 1);
 	//rectangleA->SetSize(sf::Vector2f(100, 50));
 	rectangleA->SetColor(sf::Color::Red);
 	rectangleA->SetPosition(sf::Vector2f(400, 400));
@@ -97,9 +97,6 @@ void Game_Engine::CollisionResolve(int indexShapeA, int indexShapeB, sf::Vector2
 	float e = engineTools.MinValue(objectList[indexShapeA]->GetRestitution(), objectList[indexShapeB]->GetRestitution()); // calculates the restitution
 
 	float j = -(1 + e) * engineTools.DotProduct(relativeVelocity, normal);
-
-
-	//j /= (engineTools.DotProduct(normal, normal) * (1 / objectList[indexShapeA]->_mass + 1 / objectList[indexShapeB]->_mass)); // calculates the impulse
 	j /= (1.f / objectList[indexShapeA]->_mass + (1.f / objectList[indexShapeB]->_mass)); // calculates the impulse
 
 
@@ -124,19 +121,16 @@ void Game_Engine::CollisionResolve(int indexShapeA, int indexShapeB, sf::Vector2
 	}
 	if (objectList[indexShapeA]->GetLockedPosition()) // if object A is locked
 	{
+		//j *= objectList[indexShapeA]->GetRestitution();
 		objectList[indexShapeB]->SetPosition(objectList[indexShapeB]->GetPosition() - normal * depth); // move object B the full depth
 		objectList[indexShapeB]->SetVelocity(objectList[indexShapeB]->GetVelocity() + j / objectList[indexShapeB]->_mass * normal);
-		
 		return;
 	}
 	if (objectList[indexShapeB]->GetLockedPosition()) // if object B is locked
 	{
-		///////////// CHANGE " + NORMAL" TO "- NORMAL" IF HAVING COLLISION ISSUE //////////////
-		std::cout << normal.x << ", " << normal.y << "\n";
+		//j *= objectList[indexShapeB]->GetRestitution();
 		objectList[indexShapeA]->SetPosition(objectList[indexShapeA]->GetPosition() + normal * depth); // move object A the full depth
 		objectList[indexShapeA]->SetVelocity(objectList[indexShapeA]->GetVelocity() - j / objectList[indexShapeA]->_mass * normal);
-		//std::cout << objectList[indexShapeA]->GetPosition().x << ", " << objectList[indexShapeA]->GetPosition().y << "\n\n";
-		
 		return;
 	}
 }
@@ -163,10 +157,7 @@ void Game_Engine::CollisionCheck()
 				sf::Vector2f circleCenter =					objectList[k]->GetPosition();
 				sf::Vector2f polygonCenter =					objectList[i]->GetPosition();
 				std::vector<sf::Vector2f>vertices =			objectList[i]->GetVertices(objectList[i]->GetPointCount());
-				if (engineTools.SATCircleToPolyCollision(circleCenter, circleRadius, polygonCenter, vertices, normal, depth)) 
-				{ 
-					CollisionResolve(i, k, normal, depth); 
-				}
+				if (engineTools.SATCircleToPolyCollision(circleCenter, circleRadius, polygonCenter, vertices, normal, depth)) { CollisionResolve(i, k, normal, depth); }
 			}
 			else if (objectList[i]->GetShapeType() == 1 && objectList[k]->GetShapeType() == 0) // if one object is a circle and the other a rectangle
 			{
@@ -174,10 +165,7 @@ void Game_Engine::CollisionCheck()
 				sf::Vector2f circleCenter =					objectList[i]->GetPosition();
 				sf::Vector2f polygonCenter =					objectList[k]->GetPosition();
 				std::vector<sf::Vector2f> vertices =		objectList[k]->GetVertices(objectList[k]->GetPointCount());
-				if (engineTools.SATCircleToPolyCollision(circleCenter, circleRadius, polygonCenter, vertices, normal, depth)) 
-				{ 
-					CollisionResolve(i, k, normal, depth); 
-				}
+				if (engineTools.SATCircleToPolyCollision(circleCenter, circleRadius, polygonCenter, vertices, normal, depth)) { CollisionResolve(i, k, normal, depth); }
 				
 			}
 			else if (objectList[i]->GetShapeType() == 1 && objectList[k]->GetShapeType() == 1) // if both objects are circles
@@ -214,9 +202,8 @@ void Game_Engine::Movement()
 	{
 		rectangleB->AddForce(sf::Vector2f(0, 0.5f));
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) // resets the position of the object
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) // resets the velocity of the object
 	{
-		
 		rectangleB->SetVelocity(sf::Vector2f(0, 0));
 	}
 }
@@ -224,20 +211,7 @@ void Game_Engine::Movement()
 void Game_Engine::Update()
 {
 	PhysicsUpdate();
-	//CollisionCheck();
-
-	
-	sf::Vector2f normal;
-	float depth;
-
-	float circleRadius = rectangleB->GetRadius();
-	sf::Vector2f circleCenter = rectangleB->GetPosition();
-	sf::Vector2f polygonCenter = objectList[2]->GetPosition();
-	std::vector<sf::Vector2f> vertices = objectList[2]->GetVertices(objectList[2]->GetPointCount());
-	if (engineTools.SATCircleToPolyCollision(circleCenter, circleRadius, polygonCenter, vertices, normal, depth))
-	{
-		CollisionResolve(1, 2, normal, depth);
-	}
+	CollisionCheck();
 
 
 	orgin->SetPosition(rectangleA->GetPosition());
