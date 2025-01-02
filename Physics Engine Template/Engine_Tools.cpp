@@ -17,6 +17,7 @@ bool Engine_Tools::SATPolygonCollision(std::vector<sf::Vector2f> verticesA, std:
     float minA, maxA, minB, maxB;
     normal = sf::Vector2f(0, 0);
     depth = float(INT_MAX);
+    sf::Vector2f axis = sf::Vector2f(0, 0);
 
     for (int i = 0; i < verticesA.size(); i++) // loops through all the vertices of the first polygon
     {
@@ -24,7 +25,8 @@ bool Engine_Tools::SATPolygonCollision(std::vector<sf::Vector2f> verticesA, std:
         sf::Vector2f edgeVertexB = verticesA[(i + 1) % verticesA.size()]; // finds 2 connected vertices to calculate normal with
 
         sf::Vector2f edge = edgeVertexB - edgeVertexA;
-        sf::Vector2f axis = sf::Vector2f(-edge.y, edge.x);
+        axis = sf::Vector2f(-edge.y, edge.x);
+        axis = Normalize(axis);
 
         ProjectVerticesToAxis(verticesA, axis, minA, maxA);
         ProjectVerticesToAxis(verticesB, axis, minB, maxB); // projects both polygons to the axis and returns their min and max values to check for overlap
@@ -51,7 +53,8 @@ bool Engine_Tools::SATPolygonCollision(std::vector<sf::Vector2f> verticesA, std:
         sf::Vector2f edgeVertexB = verticesB[(i + 1) % verticesB.size()];
 
         sf::Vector2f edge = edgeVertexB - edgeVertexA;
-        sf::Vector2f axis = sf::Vector2f(-edge.y, edge.x);
+        axis = sf::Vector2f(-edge.y, edge.x);
+        axis = Normalize(axis);
 
         ProjectVerticesToAxis(verticesA, axis, minA, maxA);
         ProjectVerticesToAxis(verticesB, axis, minB, maxB);
@@ -70,8 +73,8 @@ bool Engine_Tools::SATPolygonCollision(std::vector<sf::Vector2f> verticesA, std:
         }
     }
 
-    depth /= Length(normal);
-    normal = Normalize(normal);
+    //depth /= Length(normal);
+    //normal = Normalize(normal);
 
     sf::Vector2f centerA = ArithmaticMean(verticesA);
     sf::Vector2f centerB = ArithmaticMean(verticesB);
@@ -87,11 +90,12 @@ bool Engine_Tools::SATPolygonCollision(std::vector<sf::Vector2f> verticesA, std:
     return true;
 }
 
-bool Engine_Tools::SATCircleToPolyCollision(sf::Vector2f circleCenter, float circleRadius, std::vector<sf::Vector2f> vertices, sf::Vector2f& normal, float& depth)
+bool Engine_Tools::SATCircleToPolyCollision(sf::Vector2f circleCenter, float circleRadius, sf::Vector2f polygonCenter, std::vector<sf::Vector2f> vertices, sf::Vector2f& normal, float& depth)
 {
     float minA, maxA, minB, maxB;
     normal = sf::Vector2f(0, 0);
     depth = float(INT_MAX);
+    sf::Vector2f axis = sf::Vector2f(0, 0);
 
 
     for (int i = 0; i < vertices.size(); i++) // loops through all the vertices of the first polygon
@@ -100,7 +104,8 @@ bool Engine_Tools::SATCircleToPolyCollision(sf::Vector2f circleCenter, float cir
         sf::Vector2f edgeVertexB = vertices[(i + 1) % vertices.size()]; // finds 2 connected vertices to calculate normal with
 
         sf::Vector2f edge = edgeVertexB - edgeVertexA;
-        sf::Vector2f axis = sf::Vector2f(-edge.y, edge.x);
+        axis = sf::Vector2f(-edge.y, edge.x);
+        axis = Normalize(axis);
 
         ProjectVerticesToAxis(vertices, axis, minA, maxA);
         ProjectCircleToAxis(circleCenter, circleRadius, axis, minB, maxB);
@@ -124,7 +129,8 @@ bool Engine_Tools::SATCircleToPolyCollision(sf::Vector2f circleCenter, float cir
     sf::Vector2f closestPoint = vertices[closestPointIndex];
 
 
-    sf::Vector2f axis = closestPoint - circleCenter;
+    axis = closestPoint - circleCenter;
+    axis = Normalize(axis);
 
     ProjectVerticesToAxis(vertices, axis, minA, maxA);
     ProjectCircleToAxis(circleCenter, circleRadius, axis, minB, maxB);
@@ -142,10 +148,8 @@ bool Engine_Tools::SATCircleToPolyCollision(sf::Vector2f circleCenter, float cir
         normal = axis;
     }
 
-    depth /= Length(normal);
-    normal = Normalize(normal);
-
-    sf::Vector2f polygonCenter = ArithmaticMean(vertices);
+    //depth /= Length(normal);
+    //normal = Normalize(normal);
 
     sf::Vector2f centerDirection = polygonCenter - circleCenter;
 
