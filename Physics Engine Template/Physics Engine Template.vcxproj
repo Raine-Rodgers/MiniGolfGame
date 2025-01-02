@@ -24,6 +24,7 @@
     <ProjectGuid>{ee2314c8-3464-4659-b7f2-5a1a16b264a7}</ProjectGuid>
     <RootNamespace>PhysicsEngineTemplate</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>MiniGolfGame</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -137,15 +138,11 @@
     <ClCompile Include="Game_Engine.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rigid_Body.cpp" />
-    <ClCompile Include="Rigid_Body_Circle.cpp" />
-    <ClCompile Include="Rigid_Body_Rectangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine_Tools.h" />
     <ClInclude Include="Game_Engine.h" />
     <ClInclude Include="Rigid_Body.h" />
-    <ClInclude Include="Rigid_Body_Circle.h" />
-    <ClInclude Include="Rigid_Body_Rectangle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,8 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
-#include "Rigid_Body_Rectangle.h"
-#include "Rigid_Body_Circle.h"
+#include "Rigid_Body.h"
 #include "Engine_Tools.h"
 
 class Game_Engine

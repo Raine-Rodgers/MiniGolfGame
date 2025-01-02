@@ -24,12 +24,6 @@
     <ClCompile Include="Rigid_Body.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Rigid_Body_Rectangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rigid_Body_Circle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Engine_Tools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -39,12 +33,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Rigid_Body.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rigid_Body_Rectangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rigid_Body_Circle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine_Tools.h">
