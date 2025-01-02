@@ -137,11 +137,13 @@
     <ClCompile Include="Engine_Tools.cpp" />
     <ClCompile Include="Game_Engine.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map1.cpp" />
     <ClCompile Include="Rigid_Body.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine_Tools.h" />
     <ClInclude Include="Game_Engine.h" />
+    <ClInclude Include="Map1.h" />
     <ClInclude Include="Rigid_Body.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

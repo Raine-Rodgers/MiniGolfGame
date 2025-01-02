@@ -15,7 +15,7 @@ Game_Engine::~Game_Engine()
 void Game_Engine::initWindow() // initializes the window with the title and size
 {
 	// sf::VideoMode::getDesktopMode().width * 0.5f, sf::VideoMode::getDesktopMode().height * 0.7f
-	this->videoMode = sf::VideoMode(900, 900);
+	this->videoMode = sf::VideoMode(800, 1000);
 	this->window = new sf::RenderWindow(this->videoMode, "Template", sf::Style::Close | sf::Style::Titlebar);
 	
 
@@ -28,19 +28,20 @@ void Game_Engine::initVariables() // basic initialization function
 	drag = 0.99f; // higher number = less drag
 	engineTools = Engine_Tools();
 	objectList = std::vector<Rigid_Body*>();
+	map1 = Map1();
 
 	rectangleA = new Rigid_Body(true, true, 1);
 	//rectangleA->SetSize(sf::Vector2f(100, 50));
 	rectangleA->SetColor(sf::Color::Red);
 	rectangleA->SetPosition(sf::Vector2f(400, 400));
-	rectangleA->SetRadius(50);
+	rectangleA->SetRadius(20);
 	rectangleA->SetOrigin();
 
 	rectangleB = new Rigid_Body(false, true, 1);
 	rectangleB->SetSize(sf::Vector2f(100, 50));
 	rectangleB->SetColor(sf::Color::Green);
 	rectangleB->SetPosition(sf::Vector2f(400, 500));
-	rectangleB->SetRadius(50);
+	rectangleB->SetRadius(20);
 	rectangleB->SetOrigin();
 
 	orgin = new Rigid_Body(true, false, 1);
@@ -51,7 +52,10 @@ void Game_Engine::initVariables() // basic initialization function
 
 	objectList.push_back(rectangleA);
 	objectList.push_back(rectangleB);
+	map1.addToVectorPool(objectList);
+	std::cout << objectList.size() << std::endl;
 	//objectList.push_back(orgin);
+
 
 
 }
@@ -162,14 +166,14 @@ void Game_Engine::CollisionCheck()
 				sf::Vector2f circleCenter =					objectList[k]->GetPosition();
 				std::vector<sf::Vector2f>vertices =			objectList[i]->GetVertices(objectList[i]->GetPointCount());
 				if (engineTools.SATCircleToPolyCollision(circleCenter, circleRadius, vertices, normal, depth)) { CollisionResolve(i, k, normal, depth); }
-				//std::cout << "rect and circ collision" << std::endl;
 			}
 			else if (objectList[i]->GetShapeType() == 1 && objectList[k]->GetShapeType() == 0) // if one object is a circle and the other a rectangle
 			{
 				float circleRadius =						objectList[i]->GetRadius();
 				sf::Vector2f circleCenter =					objectList[i]->GetPosition();
 				std::vector<sf::Vector2f> vertices =		objectList[k]->GetVertices(objectList[k]->GetPointCount());
-				if (engineTools.SATCircleToPolyCollision(circleCenter, circleRadius, vertices, normal, depth)) { CollisionResolve(i, k, normal, depth); }
+				if (engineTools.SATCircleToPolyCollision(circleCenter, circleRadius, vertices, normal, depth)) { CollisionResolve(i, k, normal, depth); std::cout << depth << std::endl; }
+				
 				
 			}
 			else if (objectList[i]->GetShapeType() == 1 && objectList[k]->GetShapeType() == 1) // if both objects are circles
@@ -205,6 +209,11 @@ void Game_Engine::Movement()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) // moves the object down
 	{
 		rectangleB->AddForce(sf::Vector2f(0, 0.5f));
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) // resets the position of the object
+	{
+		
+		rectangleB->SetVelocity(sf::Vector2f(0, 0));
 	}
 }
 
