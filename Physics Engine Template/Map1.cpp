@@ -8,13 +8,13 @@ Map1::Map1()
 	_wall3 = new Rigid_Body(true, true, 0);
 	_wall4 = new Rigid_Body(true, true, 0);
 
-	_wall1->SetPosition({ 140, 10 });
-	_wall2->SetPosition({ 100, 10 });
-	_wall3->SetPosition({ 100, 800 });
-	_wall4->SetPosition({ 650, 10 });
+	_wall1->SetPosition({ 400, 50 });
+	_wall2->SetPosition({ 125, 425 });
+	_wall3->SetPosition({ 380, 840 });
+	_wall4->SetPosition({ 675, 445 });
 
 	_wall1->SetSize({ 510, 40 });
-	_wall2->SetSize({ 40, 800 });
+	_wall2->SetSize({ 40, 790 });
 	_wall3->SetSize({ 550, 40 });
 	_wall4->SetSize({ 40, 830 });
 
@@ -28,6 +28,11 @@ Map1::Map1()
 	_tempObjectTransferPool.push_back(_wall2);
 	_tempObjectTransferPool.push_back(_wall3);
 	_tempObjectTransferPool.push_back(_wall4);
+
+	_wall1->SetRecOrigin();
+	_wall2->SetRecOrigin();
+	_wall3->SetRecOrigin();
+	_wall4->SetRecOrigin();
 }
 
 Map1::~Map1()
