@@ -85,7 +85,7 @@ void Game_Engine::PollEvents()
 void Game_Engine::PhysicsUpdate()
 {
 	_player->SetVelocity(_player->GetVelocity() * _drag); // applies _drag to the object
-	if ((_player->GetVelocity().x < 0.05 && _player->GetVelocity().x > -0.05) && (_player->GetVelocity().y < 0.05 && _player->GetVelocity().y > -0.05)) // if the velocity is close to 0
+	if ((_player->GetVelocity().x < 0.13 && _player->GetVelocity().x > -0.13) && (_player->GetVelocity().y < 0.13 && _player->GetVelocity().y > -0.13)) // if the velocity is close to 0
 	{
 		_player->SetVelocity(sf::Vector2f(0, 0)); // set the velocity to 0
 	}
@@ -99,13 +99,13 @@ void Game_Engine::CollisionResolve(int indexShapeA, int indexShapeB, sf::Vector2
 
 	float e = _engineTools.MinValue(_objectList[indexShapeA]->GetRestitution(), _objectList[indexShapeB]->GetRestitution()); // calculates the restitution
 
-	float j = -(1 + e) * _engineTools.DotProduct(relativeVelocity, normal);
+	float j = -(1 + e) *_engineTools.DotProduct(relativeVelocity, normal);
 	j /= (1.f / _objectList[indexShapeA]->_mass + (1.f / _objectList[indexShapeB]->_mass)); // calculates the impulse
 
 	sf::Vector2f impulse = j * normal; // calculates the impulse
 
 	
-	//_objectList[indexShapeA]->SetVelocity({5, 5});
+	std::cout << _player->GetVelocity().x << " " << _player->GetVelocity().y << "\n";
 
 	if (!(_objectList[indexShapeA]->GetCollidable() || _objectList[indexShapeB]->GetCollidable())) // if either object is not collidable
 	{
@@ -120,15 +120,15 @@ void Game_Engine::CollisionResolve(int indexShapeA, int indexShapeB, sf::Vector2
 		_objectList[indexShapeA]->SetPosition(_objectList[indexShapeA]->GetPosition() + normal * depth / 2.f); // move each object half the depth
 		_objectList[indexShapeB]->SetPosition(_objectList[indexShapeB]->GetPosition() - normal * depth / 2.f);
 
-		_objectList[indexShapeA]->SetVelocity(_objectList[indexShapeA]->GetVelocity() - impulse * (1.f / _objectList[indexShapeA]->_mass)); // applies the impulse to the velocity
-		_objectList[indexShapeB]->SetVelocity(_objectList[indexShapeB]->GetVelocity() + impulse * (1.f / _objectList[indexShapeB]->_mass));
+		_objectList[indexShapeA]->SetVelocity(_objectList[indexShapeA]->GetVelocity() - impulse * _objectList[indexShapeA]->_mass); // applies the impulse to the velocity
+		_objectList[indexShapeB]->SetVelocity(_objectList[indexShapeB]->GetVelocity() + impulse * _objectList[indexShapeB]->_mass);
 		return; // return to prevent further calculations
 	}
 	if (_objectList[indexShapeA]->GetLockedPosition()) // if object A is locked
 	{
 		//j *= _objectList[indexShapeA]->GetRestitution();
 		_objectList[indexShapeB]->SetPosition(_objectList[indexShapeB]->GetPosition() - normal * depth); // move object B the full depth
-		_objectList[indexShapeB]->SetVelocity(_objectList[indexShapeB]->GetVelocity() + impulse * (1.f / _objectList[indexShapeB]->_mass));
+		_objectList[indexShapeB]->SetVelocity(_objectList[indexShapeB]->GetVelocity() + impulse * _objectList[indexShapeB]->_mass);
 
 		return;
 	}
@@ -136,9 +136,8 @@ void Game_Engine::CollisionResolve(int indexShapeA, int indexShapeB, sf::Vector2
 	{
 		//j *= _objectList[indexShapeB]->GetRestitution();
 		_objectList[indexShapeA]->SetPosition(_objectList[indexShapeA]->GetPosition() + normal * depth); // move object A the full depth
-		_objectList[indexShapeA]->SetVelocity(_objectList[indexShapeA]->GetVelocity() - impulse * (1.f / _objectList[indexShapeA]->_mass));
-		std::cout << impulse.x << " " << impulse.y << std::endl;
-		std::cout << j << std::endl;
+		_objectList[indexShapeA]->SetVelocity(_objectList[indexShapeA]->GetVelocity() - impulse * _objectList[indexShapeA]->_mass);
+
 		//std::cout << normal.x << " " << normal.y << std::endl;
 		return;
 	}
