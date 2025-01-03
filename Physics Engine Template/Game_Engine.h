@@ -13,27 +13,30 @@ private:
 	void						initWindow();
 	void						initVariables();
 
-	sf::VideoMode				videoMode;
-	sf::RenderWindow*			window;
-	sf::Event					event;
-	Engine_Tools				engineTools;
-	float						gravity;
-	float						drag;
-	std::vector<Rigid_Body*>	objectList;
-	Map1						map1;
+	sf::VideoMode				_videoMode;
+	sf::RenderWindow*			_window;
+	sf::Event					_event;
+	Engine_Tools				_engineTools;
+	float						_gravity;
+	float						_drag;
+	float						_mouseDistance;
+	float						_mouseImpulseDampening;
+	std::vector<Rigid_Body*>	_objectList;
+	Map1						_map1;
+	bool						_isMouseHeld;
 
 
 	// test variables
-	Rigid_Body*	rectangleA;
-	Rigid_Body*	rectangleB;
-	Rigid_Body* orgin;
+	Rigid_Body*	_goal;
+	Rigid_Body*	_player;
 
 	int count = 0;
 
 
 public:
-	const bool					running() const { return this->window->isOpen(); } // returns if the window is open or not
+	const bool					running() const { return this->_window->isOpen(); } // returns if the window is open or not
 	void						PollEvents();
+	void						ApplyForce();
 	void						Movement();
 	void						PhysicsUpdate();
 	void						CollisionCheck();
