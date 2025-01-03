@@ -62,6 +62,9 @@ public:
 
 	// Methods
 	void							AddForce(sf::Vector2f force)					{ _force += force; }
+
+	sf::FloatRect GetGlobalBounds() { return _rectangle.getGlobalBounds(); }
+
 	void							Update(float gravity);
 	void							RectPhysicsUpdate(float gravity);
 	void							CircPhysicsUpdate(float gravity);
