@@ -23,8 +23,6 @@ Map1::Map1()
 	_wall3->SetColor({ 0, 255, 0, 255 }); // green
 	_wall4->SetColor({ 0, 0, 255, 255 }); // blue
 
-	_wall1->SetRotation(45);
-
 	_tempObjectTransferPool = std::vector<Rigid_Body*>(); // theres for sure a better way to do this but i can think of it so for now im just gonna allocate this to the free store and delete it after use to not waste memory i guess
 	_tempObjectTransferPool.push_back(_wall1);
 	_tempObjectTransferPool.push_back(_wall2);
