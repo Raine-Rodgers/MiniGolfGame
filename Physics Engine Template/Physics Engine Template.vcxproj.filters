@@ -27,7 +27,7 @@
     <ClCompile Include="Engine_Tools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Map1.cpp">
+    <ClCompile Include="Maps.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,7 +41,7 @@
     <ClInclude Include="Engine_Tools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Map1.h">
+    <ClInclude Include="Maps.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
