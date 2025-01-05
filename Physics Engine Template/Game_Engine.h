@@ -5,7 +5,7 @@
 #include <SFML/System.hpp>
 #include "Rigid_Body.h"
 #include "Engine_Tools.h"
-#include "Map1.h"
+#include "Maps.h"
 
 class Game_Engine
 {
@@ -22,7 +22,7 @@ private:
 	float						_mouseDistance;
 	float						_mouseImpulseDampening;
 	std::vector<Rigid_Body*>	_objectList;
-	Map1						_map1;
+	Maps						_maps;
 	bool						_isMouseHeld;
 
 

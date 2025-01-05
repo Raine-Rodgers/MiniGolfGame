@@ -33,7 +33,7 @@ void Game_Engine::initVariables() // basic initialization function
 	_drag = 0.99f; // higher number = less _drag
 	_engineTools = Engine_Tools();
 	_objectList = std::vector<Rigid_Body*>();
-	_map1 = Map1();
+	_maps = Maps();
 	_isMouseHeld = false;
 	_mouseImpulseDampening = 0.3f;
 
@@ -41,20 +41,21 @@ void Game_Engine::initVariables() // basic initialization function
 	//_goal->SetSize(sf::Vector2f(100, 50));
 	_goal->SetColor(sf::Color::Red);
 	_goal->SetPosition(sf::Vector2f(400, 400));
-	_goal->SetRadius(20);
+	_goal->SetRadius(10);
 	_goal->SetOrigin();
 
 	_player = new Rigid_Body(false, true, 1);
 	_player->SetSize(sf::Vector2f(20, 50));
 	_player->SetColor(sf::Color::Green);
 	_player->SetPosition(sf::Vector2f(400, 500));
-	_player->SetRadius(20);
+	_player->SetRadius(10);
 	_player->SetOrigin();
 
+	_maps.spawnMap2();
 
 	_objectList.push_back(_goal);
 	_objectList.push_back(_player);
-	_map1.addToVectorPool(_objectList);
+	_maps.addToVectorPool(_objectList);
 	std::cout << _objectList.size() << std::endl;
 	//_objectList.push_back(orgin);
 
@@ -216,6 +217,10 @@ void Game_Engine::Movement()
 	{
 		_player->SetVelocity(sf::Vector2f(0, 0));
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) // random
+	{
+		_maps.spawnMap2();
+	}
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
 	{
@@ -260,6 +265,7 @@ void Game_Engine::Update()
 	}
 	PollEvents();
 	Movement();
+	_maps.Update();
 }
 
 void Game_Engine::Render()
