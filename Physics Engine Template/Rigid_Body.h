@@ -48,7 +48,8 @@ public:
 	sf::Vector2f					GetSize()										{ return _rectangle.getSize(); }
 	void							SetRotation(float rotation)						{ _rectangle.setRotation(rotation); }
 	void							SetSize(sf::Vector2f size)						{ _rectangle.setSize(size); }
-	void							SetRecOrigin() { _rectangle.setOrigin(_rectangle.getSize().x / 2, _rectangle.getSize().y / 2); }
+	void							SetRecOrigin()									{ _rectangle.setOrigin(_rectangle.getSize().x / 2, _rectangle.getSize().y / 2); }
+	sf::FloatRect					GetGlobalBounds()								{ return _rectangle.getGlobalBounds(); }
 
 	void							SetVelocity(sf::Vector2f velocity)				{ _velocity = velocity; }
 	void							SetPosition(sf::Vector2f position);
@@ -62,8 +63,9 @@ public:
 
 	// Methods
 	void							AddForce(sf::Vector2f force)					{ _force += force; }
+	void							SpinRect(float factor)							{ _rectangle.rotate(factor * _engineTools.DeltaTime()); }
 
-	sf::FloatRect GetGlobalBounds() { return _rectangle.getGlobalBounds(); }
+	
 
 	void							Update(float gravity);
 	void							RectPhysicsUpdate(float gravity);
