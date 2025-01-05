@@ -26,11 +26,12 @@ private:
 	bool						_isMouseHeld;
 
 
-	// test variables
 	Rigid_Body*	_goal;
 	Rigid_Body*	_player;
 
-	int count = 0;
+	sf::RectangleShape			_mouseLine;
+	bool						_mouseLineActive;
+
 
 
 public:

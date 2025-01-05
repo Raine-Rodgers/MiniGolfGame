@@ -36,13 +36,15 @@ void Game_Engine::initVariables() // basic initialization function
 	_maps = Maps();
 	_isMouseHeld = false;
 	_mouseImpulseDampening = 0.3f;
+	_mouseLineActive = false;
+	_mouseLine = sf::RectangleShape(sf::Vector2f(0, 0));
 
-	_goal = new Rigid_Body(false, true, 1);
-	//_goal->SetSize(sf::Vector2f(100, 50));
-	_goal->SetColor(sf::Color::Red);
-	_goal->SetPosition(sf::Vector2f(400, 400));
-	_goal->SetRadius(10);
-	_goal->SetOrigin();
+	//_goal = new Rigid_Body(true, false, 1);
+	////_goal->SetSize(sf::Vector2f(100, 50));
+	//_goal->SetColor(sf::Color::Red);
+	//_goal->SetPosition(sf::Vector2f(400, 400));
+	//_goal->SetRadius(10);
+	//_goal->SetOrigin();
 
 	_player = new Rigid_Body(false, true, 1);
 	_player->SetSize(sf::Vector2f(20, 50));
@@ -51,9 +53,9 @@ void Game_Engine::initVariables() // basic initialization function
 	_player->SetRadius(10);
 	_player->SetOrigin();
 
-	_maps.spawnMap2();
+	_maps.spawnMap1();
 
-	_objectList.push_back(_goal);
+	//_objectList.push_back(_goal);
 	_objectList.push_back(_player);
 	_maps.addToVectorPool(_objectList);
 	std::cout << _objectList.size() << std::endl;
@@ -108,7 +110,7 @@ void Game_Engine::CollisionResolve(int indexShapeA, int indexShapeB, sf::Vector2
 	
 	std::cout << _player->GetVelocity().x << " " << _player->GetVelocity().y << "\n";
 
-	if (!(_objectList[indexShapeA]->GetCollidable() || _objectList[indexShapeB]->GetCollidable())) // if either object is not collidable
+	if ((!_objectList[indexShapeA]->GetCollidable() || !_objectList[indexShapeB]->GetCollidable())) // if either object is not collidable
 	{
 		return;
 	}
@@ -233,10 +235,18 @@ void Game_Engine::Movement()
 		if (_playerBounds.contains(sf::Vector2f(sf::Mouse::getPosition(*_window).x, sf::Mouse::getPosition(*_window).y))) // if the mouse is within the bounds of the _player set mouse as being held down
 		{
 			_isMouseHeld = true;
+			_mouseLineActive = true;
 		}
 		if (_isMouseHeld) // if the mouse is held get the distance between the mouse and _player to use as the impulse value
 		{
+			sf::Vector2f normal = _engineTools.Normalize(sf::Vector2f(sf::Mouse::getPosition(*_window)) - _player->GetPosition());
+			normal = -normal;
+
 			_mouseDistance = _engineTools.Distance(_player->GetPosition(), sf::Vector2f(sf::Mouse::getPosition(*_window)));
+			_mouseLine = sf::RectangleShape({ _mouseDistance, 5 });
+			_mouseLine.setOrigin(0, 2.5);
+			_mouseLine.setPosition(_player->GetPosition());
+			_mouseLine.setRotation(std::atan2(normal.y, normal.x) * 180 / 3.141);
 			std::cout << _mouseDistance << "\n";
 		}
 	}
@@ -251,6 +261,7 @@ void Game_Engine::ApplyForce()
 	normal = -normal;
 	_player->AddForce({ normal * _mouseDistance * _mouseImpulseDampening }); // apply the impulse to the _player
 	_isMouseHeld = false;
+	_mouseLineActive = false;
 	_mouseDistance = 0;
 }
 
@@ -275,6 +286,10 @@ void Game_Engine::Render()
 	for (int i = 0; i < _objectList.size(); i++) // iterates through the object list and renders each object
 	{
 		_objectList[i]->Render(this->_window);
+	}
+	if (_mouseLineActive) // if the mouse line is active render it
+	{
+		this->_window->draw(_mouseLine);
 	}
 
 	this->_window->display(); // displayed the frame with the updated information
