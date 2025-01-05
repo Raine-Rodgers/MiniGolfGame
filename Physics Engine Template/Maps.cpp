@@ -20,7 +20,12 @@ Maps::Maps()
 	_circObstacle3 = new Rigid_Body(true, true, 1);
 	_circObstacle4 = new Rigid_Body(true, true, 1);
 
+	_goal = new Rigid_Body(true, false, 1);
+
 	_activeLVL = 0;
+
+	
+	
 	
 }
 
@@ -41,6 +46,12 @@ void Maps::addToVectorPool(std::vector<Rigid_Body*>& tempVec)
 	tempVec.push_back(_recObstacle2);
 	tempVec.push_back(_recObstacle3);
 	tempVec.push_back(_recObstacle4);
+	tempVec.push_back(_circObstacle1);
+	tempVec.push_back(_circObstacle2);
+	tempVec.push_back(_circObstacle3);
+	tempVec.push_back(_circObstacle4);
+		
+	tempVec.push_back(_goal);
 }
 
 void Maps::spawnMap1()
@@ -62,11 +73,16 @@ void Maps::spawnMap1()
 	_wall3->SetColor({ 0, 255, 0, 255 }); // green
 	_wall4->SetColor({ 0, 0, 255, 255 }); // blue
 
+	_goal->SetPosition({ 400, 300 });
+	_goal->SetRadius(15);
+
 
 	_wall1->SetRecOrigin();
 	_wall2->SetRecOrigin();
 	_wall3->SetRecOrigin();
 	_wall4->SetRecOrigin();
+	_goal->SetOrigin();
+	
 }
 
 void Maps::spawnMap2()
@@ -122,6 +138,7 @@ void Maps::spawnMap2()
 	_recObstacle2->SetRecOrigin();
 	_recObstacle3->SetRecOrigin();
 	_recObstacle4->SetRecOrigin();
+	_goal->SetRecOrigin();
 }
 
 

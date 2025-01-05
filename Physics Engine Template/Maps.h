@@ -25,6 +25,8 @@ private:
 	Rigid_Body* _circObstacle3;
 	Rigid_Body* _circObstacle4;
 
+	Rigid_Body* _goal;
+
 	std::vector<Rigid_Body*> _tempObjectTransferPool;
 	int _activeLVL;
 
