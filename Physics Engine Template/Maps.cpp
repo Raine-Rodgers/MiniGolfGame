@@ -126,7 +126,9 @@ void Maps::spawnMap2()
 	_recObstacle4->SetSize({ 100, 5 });
 
 	_recObstacle1->SetRotation(90);
+	_recObstacle2->SetRotation(0);
 	_recObstacle3->SetRotation(90);
+	_recObstacle4->SetRotation(0);
 
 	_wall1->SetRecOrigin();
 	_wall2->SetRecOrigin();
