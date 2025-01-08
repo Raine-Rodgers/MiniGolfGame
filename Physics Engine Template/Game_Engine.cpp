@@ -38,13 +38,8 @@ void Game_Engine::initVariables() // basic initialization function
 	_mouseImpulseDampening = 0.3f;
 	_mouseLineActive = false;
 	_mouseLine = sf::RectangleShape(sf::Vector2f(0, 0));
+	_rectForTexHead = sf::RectangleShape(sf::Vector2f(0, 0));
 
-	//_goal = new Rigid_Body(true, false, 1);
-	////_goal->SetSize(sf::Vector2f(100, 50));
-	//_goal->SetColor(sf::Color::Red);
-	//_goal->SetPosition(sf::Vector2f(400, 400));
-	//_goal->SetRadius(10);
-	//_goal->SetOrigin();
 
 	_player = new Rigid_Body(false, true, 1);
 	_player->SetSize(sf::Vector2f(20, 50));
@@ -58,9 +53,15 @@ void Game_Engine::initVariables() // basic initialization function
 	//_objectList.push_back(_goal);
 	_objectList.push_back(_player);
 	_maps.addToVectorPool(_objectList);
-	std::cout << _objectList.size() << std::endl;
 	//_objectList.push_back(orgin);
 
+	std::system("dir");
+	_textureBody = sf::Texture();
+	_textureBody.loadFromFile("Textures/Arrow_Pointer_Sprite_Body-1.png");
+	_textureHead = sf::Texture();
+	_textureHead.loadFromFile("Textures/Arrow_Pointer_Sprite_Pointer-1.png");
+
+	count = 1;
 
 
 }
@@ -107,8 +108,6 @@ void Game_Engine::CollisionResolve(int indexShapeA, int indexShapeB, sf::Vector2
 
 	sf::Vector2f impulse = j * normal; // calculates the impulse
 
-	
-	std::cout << _player->GetVelocity().x << " " << _player->GetVelocity().y << "\n";
 
 	if ((!_objectList[indexShapeA]->GetCollidable() || !_objectList[indexShapeB]->GetCollidable())) // if either object is not collidable
 	{
@@ -141,7 +140,6 @@ void Game_Engine::CollisionResolve(int indexShapeA, int indexShapeB, sf::Vector2
 		_objectList[indexShapeA]->SetPosition(_objectList[indexShapeA]->GetPosition() + normal * depth); // move object A the full depth
 		_objectList[indexShapeA]->SetVelocity(_objectList[indexShapeA]->GetVelocity() - impulse * _objectList[indexShapeA]->_mass);
 
-		//std::cout << normal.x << " " << normal.y << std::endl;
 		return;
 	}
 }
@@ -161,7 +159,6 @@ void Game_Engine::CollisionCheck()
 				std::vector<sf::Vector2f> verticesA =		_objectList[i]->GetVertices(_objectList[i]->GetPointCount()); // create an array of vertices for each object
 				std::vector<sf::Vector2f> verticesB =		_objectList[k]->GetVertices(_objectList[k]->GetPointCount());
 				if (_engineTools.SATPolygonCollision(verticesA, verticesB, normal, depth)) { CollisionResolve(i, k, normal, depth); } // check for collision and resolve it
-				//std::cout << "rect collision" << std::endl;
 			}
 			else if (_objectList[i]->GetShapeType() == 0 && _objectList[k]->GetShapeType() == 1) // if one object is a rectangle and the other a circle. might be able to make this prettier later
 			{
@@ -243,11 +240,17 @@ void Game_Engine::Movement()
 			normal = -normal;
 
 			_mouseDistance = _engineTools.Distance(_player->GetPosition(), sf::Vector2f(sf::Mouse::getPosition(*_window)));
-			_mouseLine = sf::RectangleShape({ _mouseDistance, 5 });
-			_mouseLine.setOrigin(0, 2.5);
+			_mouseLine = sf::RectangleShape({ _mouseDistance, 70 });
+			_mouseLine.setOrigin(_mouseDistance/4.5, 34);
 			_mouseLine.setPosition(_player->GetPosition());
 			_mouseLine.setRotation(std::atan2(normal.y, normal.x) * 180 / 3.141);
-			std::cout << _mouseDistance << "\n";
+			_mouseLine.setTexture(&_textureBody);
+
+			_rectForTexHead = sf::RectangleShape({ 70, 70 });
+			_rectForTexHead.setOrigin(35, 33);
+			_rectForTexHead.setPosition(_player->GetPosition() + normal * _mouseDistance / 1.85f); // is this the best way to do it? no. do i care? kinda but i aint fixing all that so we're just gonna deal with it
+			_rectForTexHead.setRotation(std::atan2(normal.y, normal.x) * 180 / 3.141);
+			_rectForTexHead.setTexture(&_textureHead);
 		}
 	}
 	// see the event queue for the mouse button release
@@ -290,6 +293,7 @@ void Game_Engine::Render()
 	if (_mouseLineActive) // if the mouse line is active render it
 	{
 		this->_window->draw(_mouseLine);
+		this->_window->draw(_rectForTexHead);
 	}
 
 	this->_window->display(); // displayed the frame with the updated information

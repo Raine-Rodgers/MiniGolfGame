@@ -7,6 +7,9 @@
 #include "Engine_Tools.h"
 #include "Maps.h"
 
+#include <cstdlib>
+#include <iostream>
+
 class Game_Engine
 {
 private:
@@ -29,8 +32,15 @@ private:
 	Rigid_Body*	_goal;
 	Rigid_Body*	_player;
 
+	sf::Texture _textureBody;
+	sf::Texture _textureHead;
+
+
+	sf::RectangleShape			_rectForTexHead;
 	sf::RectangleShape			_mouseLine;
 	bool						_mouseLineActive;
+
+	float count;
 
 
 
