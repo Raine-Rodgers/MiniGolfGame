@@ -58,6 +58,10 @@ std::vector<sf::Vector2f> Rigid_Body::GetVertices(int vertexCount)
 void Rigid_Body::RectPhysicsUpdate(float gravity)
 {
 	_engineTools._deltaTime = _engineTools._clock.restart();
+	if (_lockedPosition) // return if the object is locked in space
+	{
+		return;
+	}
 
 	if (_velocity.y < _terminalVelocity) // apparently removing this-> fixes the issue where the _velocity is not set to 0 when using a low gravity value. No clue why tbh
 	{
@@ -76,8 +80,11 @@ void Rigid_Body::RectPhysicsUpdate(float gravity)
 
 void Rigid_Body::CircPhysicsUpdate(float gravity)
 {
-	_engineTools._deltaTime = _engineTools._clock.restart();
-	
+	_engineTools._deltaTime = _engineTools._clock.restart(); // for some reason putting this in the engine tools DeltaTime() function causes the player to not move
+	if (_lockedPosition) // and putting this in the update function below to slightly reduce compute time freezes the crosses in map 2. no clue why girl
+	{
+		return;
+	}
 
 	if (_velocity.y < _terminalVelocity) // apparently removing this-> fixes the issue where the _velocity is not set to 0 when using a low gravity value. No clue why tbh
 	{
@@ -127,10 +134,7 @@ void Rigid_Body::SetColor(sf::Color color)
 
 void Rigid_Body::Update(float gravity)
 {
-	if (_lockedPosition) // return if the object is locked in space
-	{
-		return;
-	}
+
 
 	switch (_shapeType)
 	{
