@@ -43,18 +43,15 @@ void Game_Engine::initVariables() // basic initialization function
 
 	_player = new Rigid_Body(false, true, 1);
 	_player->SetSize(sf::Vector2f(20, 50));
-	_player->SetColor(sf::Color::Green);
+	_player->SetColor(sf::Color::Red);
 	_player->SetPosition(sf::Vector2f(400, 500));
 	_player->SetRadius(10);
 	_player->SetOrigin();
 
 	_maps.SpawnMainMenu();
 	_currentState = mainMenu;
-
-	//_objectList.push_back(_goal);
 	_objectList.push_back(_player);
 	_maps.AddToVectorPool(_objectList);
-	//_objectList.push_back(orgin);
 
 	std::system("dir");
 	_textureBody = sf::Texture(); // loads the textures for the mouse line
@@ -252,7 +249,7 @@ void Game_Engine::Movement()
 			normal = -normal;
 
 			_mouseDistance = _engineTools.Distance(_player->GetPosition(), sf::Vector2f(sf::Mouse::getPosition(*_window)));
-			_mouseLine = sf::RectangleShape({ _mouseDistance, 70 });
+			_mouseLine = sf::RectangleShape({ _mouseDistance*2, 70 });
 			_mouseLine.setOrigin(_mouseDistance/4.5, 34);
 			_mouseLine.setPosition(_player->GetPosition());
 			_mouseLine.setRotation(std::atan2(normal.y, normal.x) * 180 / 3.141);
@@ -260,7 +257,7 @@ void Game_Engine::Movement()
 
 			_rectForTexHead = sf::RectangleShape({ 70, 70 });
 			_rectForTexHead.setOrigin(35, 33);
-			_rectForTexHead.setPosition(_player->GetPosition() + normal * _mouseDistance / 1.85f); // is this the best way to do it? no. do i care? kinda but i aint fixing all that so we're just gonna deal with it
+			_rectForTexHead.setPosition(_player->GetPosition() + normal * (_mouseDistance*2) / 1.53f); // is this the best way to do it? no. do i care? kinda but i aint fixing all that so we're just gonna deal with it
 			_rectForTexHead.setRotation(std::atan2(normal.y, normal.x) * 180 / 3.141);
 			_rectForTexHead.setTexture(&_textureHead);
 		}
@@ -328,7 +325,7 @@ void Game_Engine::Render()
 	case levelSelect:
 		break;
 	case game:
-		for (int i = 0; i < _objectList.size(); i++) // iterates through the object list and renders each object
+		for (int i = _objectList.size()-1; i >= 0; i--) // player is first in render queue so i itterate backwards to make sure its always on top. no way im adding a layer system
 		{
 			_objectList[i]->Render(this->_window);
 		}
