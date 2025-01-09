@@ -46,7 +46,7 @@ public:
 	Rigid_Body*					GetSelectLevelButton()	{ return _selectLevelButton; }
 
 	sf::Vector2f				GetGoalPosition()		{ return _goal->GetPosition(); }
-
+	float						GetGoalRadius()			{ return _goal->GetRadius(); }
 	void						SpawnMainMenu();
 	void						SpawnMap1();
 	void						SpawnMap2();

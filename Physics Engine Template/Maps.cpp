@@ -194,10 +194,10 @@ void Maps::Update()
 	case 1:
 		break;
 	case 2:
-		_recObstacle1->SpinRect(2);
-		_recObstacle2->SpinRect(2);
-		_recObstacle3->SpinRect(-2);
-		_recObstacle4->SpinRect(-2);
+		_recObstacle1->SpinRect(20);
+		_recObstacle2->SpinRect(20);
+		_recObstacle3->SpinRect(-20);
+		_recObstacle4->SpinRect(-20);
 		break;
 	}
 }

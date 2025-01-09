@@ -297,12 +297,18 @@ void Game_Engine::Update()
 		case game:
 			PhysicsUpdate();
 			CollisionCheck();
+			Movement();
 
 			for (int i = 0; i < _objectList.size(); i++)
 			{
 				_objectList[i]->Update(_gravity);
 			}
-			Movement();
+
+			if (_engineTools.Distance(_player->GetPosition(), _maps.GetGoalPosition()) <= _maps.GetGoalRadius())
+			{
+				_maps.SpawnMap2();
+			}
+
 			_maps.Update();
 			break;
 	}
@@ -325,7 +331,7 @@ void Game_Engine::Render()
 	case levelSelect:
 		break;
 	case game:
-		for (int i = _objectList.size()-1; i >= 0; i--) // player is first in render queue so i itterate backwards to make sure its always on top. no way im adding a layer system
+		for (int i = _objectList.size() - 1; i >= 0; i--) // player is first in render queue so i itterate backwards to make sure its always on top. no way im adding a layer system
 		{
 			_objectList[i]->Render(this->_window);
 		}

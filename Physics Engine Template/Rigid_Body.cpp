@@ -58,10 +58,6 @@ std::vector<sf::Vector2f> Rigid_Body::GetVertices(int vertexCount)
 void Rigid_Body::RectPhysicsUpdate(float gravity)
 {
 	_engineTools._deltaTime = _engineTools._clock.restart();
-	if (_lockedPosition)
-	{
-		return;
-	}
 
 	if (_velocity.y < _terminalVelocity) // apparently removing this-> fixes the issue where the _velocity is not set to 0 when using a low gravity value. No clue why tbh
 	{
@@ -81,10 +77,7 @@ void Rigid_Body::RectPhysicsUpdate(float gravity)
 void Rigid_Body::CircPhysicsUpdate(float gravity)
 {
 	_engineTools._deltaTime = _engineTools._clock.restart();
-	if (_lockedPosition)
-	{
-		return;
-	}
+	
 
 	if (_velocity.y < _terminalVelocity) // apparently removing this-> fixes the issue where the _velocity is not set to 0 when using a low gravity value. No clue why tbh
 	{
@@ -134,6 +127,10 @@ void Rigid_Body::SetColor(sf::Color color)
 
 void Rigid_Body::Update(float gravity)
 {
+	if (_lockedPosition) // return if the object is locked in space
+	{
+		return;
+	}
 
 	switch (_shapeType)
 	{
