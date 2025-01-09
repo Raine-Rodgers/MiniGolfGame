@@ -3,6 +3,15 @@
 
 Maps::Maps()
 {
+	_playButton = new Rigid_Body(true, false, 0);
+	_selectLevelButton = new Rigid_Body(true, false, 0);
+
+	_playText = new sf::Text();
+	_selectLevelText = new sf::Text();
+
+	_font = sf::Font();
+	_font.loadFromFile("Fonts/ARCADECLASSIC.TTF");
+
 	_wall1 = new Rigid_Body(true, true, 0);
 	_wall2 = new Rigid_Body(true, true, 0);
 	_wall3 = new Rigid_Body(true, true, 0);
@@ -29,6 +38,12 @@ Maps::~Maps()
 {
 }
 
+void Maps::deleteMenu()
+{
+	delete _playButton;
+	delete _selectLevelButton;
+}
+
 
 void Maps::AddToVectorPool(std::vector<Rigid_Body*>& tempVec)
 {
@@ -48,6 +63,38 @@ void Maps::AddToVectorPool(std::vector<Rigid_Body*>& tempVec)
 	tempVec.push_back(_circObstacle4);
 		
 	tempVec.push_back(_goal);
+}
+
+void Maps::SpawnMainMenu()
+{
+    _activeLVL = 0;
+
+
+
+    // Set positions and sizes for the buttons
+    _playButton->SetPosition({ 400, 300 });
+    _playButton->SetSize({ 200, 50 });
+    _selectLevelButton->SetPosition({ 400, 400 });
+    _selectLevelButton->SetSize({ 200, 50 });
+
+    // Set colors for the buttons
+    _playButton->SetColor({ 200, 140, 50, 255 }); // Green for Play
+    _selectLevelButton->SetColor({ 200, 140, 50, 255 }); // Blue for Select Level
+
+    // Set rectangle origins
+    _playButton->SetRecOrigin();
+    _selectLevelButton->SetRecOrigin();
+
+	_playText->setFont(_font);
+	_selectLevelText->setFont(_font);
+	_playText->setCharacterSize(24);
+	_selectLevelText->setCharacterSize(24);
+	_playText->setFillColor(sf::Color::Black);
+	_selectLevelText->setFillColor(sf::Color::Black);
+	_playText->setString("Play");
+	_selectLevelText->setString("Select Level");
+	_playText->setPosition({ 375, 285 });
+	_selectLevelText->setPosition({ 325, 385 });
 }
 
 void Maps::SpawnMap1()
@@ -153,4 +200,12 @@ void Maps::Update()
 		_recObstacle4->SpinRect(-2);
 		break;
 	}
+}
+
+void Maps::Render(sf::RenderWindow* window)
+{
+	_playButton->Render(window);
+	_selectLevelButton->Render(window);
+	window->draw(*this->_playText);
+	window->draw(*this->_selectLevelText);
 }

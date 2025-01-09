@@ -48,7 +48,8 @@ void Game_Engine::initVariables() // basic initialization function
 	_player->SetRadius(10);
 	_player->SetOrigin();
 
-	_maps.SpawnMap1();
+	_maps.SpawnMainMenu();
+	_currentState = mainMenu;
 
 	//_objectList.push_back(_goal);
 	_objectList.push_back(_player);
@@ -284,22 +285,32 @@ void Game_Engine::Update()
 	switch (_currentState)
 	{
 		case mainMenu:
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				if (_maps.GetPlayButton()->GetRectangle().getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(*_window).x, sf::Mouse::getPosition(*_window).y)))
+				{
+					_maps.SpawnMap1();
+					_currentState = game;
+					_maps.deleteMenu();
+				}
+			}
 			break;
 		case levelSelect:
 			break;
 		case game:
+			PhysicsUpdate();
+			CollisionCheck();
+
+			for (int i = 0; i < _objectList.size(); i++)
+			{
+				_objectList[i]->Update(_gravity);
+			}
+			Movement();
+			_maps.Update();
 			break;
 	}
-	PhysicsUpdate();
-	CollisionCheck();
-
-	for (int i = 0; i < _objectList.size(); i++)
-	{
-		_objectList[i]->Update(_gravity);
-	}
 	PollEvents();
-	Movement();
-	_maps.Update();
+	
 }
 
 void Game_Engine::Render()
@@ -307,14 +318,26 @@ void Game_Engine::Render()
 	this->_window->clear(); // clears the frame and sets the color of the _window the rgb value specified
 	this->_window->draw(_spriteMap); // draws the background texture
 
-	for (int i = 0; i < _objectList.size(); i++) // iterates through the object list and renders each object
+
+
+	switch (_currentState)
 	{
-		_objectList[i]->Render(this->_window);
-	}
-	if (_mouseLineActive) // if the mouse line is active render it
-	{
-		this->_window->draw(_mouseLine);
-		this->_window->draw(_rectForTexHead);
+	case mainMenu:
+		_maps.Render(this->_window);
+		break;
+	case levelSelect:
+		break;
+	case game:
+		for (int i = 0; i < _objectList.size(); i++) // iterates through the object list and renders each object
+		{
+			_objectList[i]->Render(this->_window);
+		}
+		if (_mouseLineActive) // if the mouse line is active render it
+		{
+			this->_window->draw(_mouseLine);
+			this->_window->draw(_rectForTexHead);
+		}
+		break;
 	}
 
 	this->_window->display(); // displayed the frame with the updated information
