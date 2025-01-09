@@ -112,14 +112,14 @@ void Game_Engine::CollisionResolve(int indexShapeA, int indexShapeB, sf::Vector2
 	sf::Vector2f impulse = j * normal; // calculates the impulse
 
 
-	if ((!_objectList[indexShapeA]->GetCollidable() || !_objectList[indexShapeB]->GetCollidable())) // if either object is not collidable
-	{
-		return;
-	}
-	if (_objectList[indexShapeA]->GetLockedPosition() && _objectList[indexShapeB]->GetLockedPosition()) // if both objects are locked
-	{
-		return;
-	}
+	//if ((!_objectList[indexShapeA]->GetCollidable() || !_objectList[indexShapeB]->GetCollidable())) // if either object is not collidable
+	//{
+	//	return;
+	//}
+	//if (_objectList[indexShapeA]->GetLockedPosition() && _objectList[indexShapeB]->GetLockedPosition()) // if both objects are locked
+	//{
+	//	return;
+	//}
 	if (!(_objectList[indexShapeA]->GetLockedPosition() || _objectList[indexShapeB]->GetLockedPosition())) // if neither object is locked
 	{
 		_objectList[indexShapeA]->SetPosition(_objectList[indexShapeA]->GetPosition() + normal * depth / 2.f); // move each object half the depth
@@ -157,6 +157,14 @@ void Game_Engine::CollisionCheck()
 	{
 		for (int k = i + 1; k < _objectList.size(); k++)
 		{
+			if ((!_objectList[i]->GetCollidable() || !_objectList[k]->GetCollidable())) // if either object is not collidable
+			{
+				return;
+			}
+			if (_objectList[i]->GetLockedPosition() && _objectList[k]->GetLockedPosition()) // if both objects are locked
+			{
+				return;
+			}
 			if (_objectList[i]->GetShapeType() == 0 && _objectList[k]->GetShapeType() == 0) // if both objects are rectangles
 			{
 				std::vector<sf::Vector2f> verticesA =		_objectList[i]->GetVertices(_objectList[i]->GetPointCount()); // create an array of vertices for each object
