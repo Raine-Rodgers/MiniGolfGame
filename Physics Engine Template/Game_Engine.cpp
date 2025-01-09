@@ -48,18 +48,21 @@ void Game_Engine::initVariables() // basic initialization function
 	_player->SetRadius(10);
 	_player->SetOrigin();
 
-	_maps.spawnMap1();
+	_maps.SpawnMap1();
 
 	//_objectList.push_back(_goal);
 	_objectList.push_back(_player);
-	_maps.addToVectorPool(_objectList);
+	_maps.AddToVectorPool(_objectList);
 	//_objectList.push_back(orgin);
 
 	std::system("dir");
-	_textureBody = sf::Texture();
+	_textureBody = sf::Texture(); // loads the textures for the mouse line
 	_textureBody.loadFromFile("Textures/Arrow_Pointer_Sprite_Body-1.png");
 	_textureHead = sf::Texture();
 	_textureHead.loadFromFile("Textures/Arrow_Pointer_Sprite_Pointer-1.png");
+	_textureMap = sf::Texture();
+	_textureMap.loadFromFile("Textures/Checker_Board.png");
+	_spriteMap = sf::Sprite(_textureMap);
 
 	count = 1;
 
@@ -218,7 +221,7 @@ void Game_Engine::Movement()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) // random
 	{
-		_maps.spawnMap2();
+		_maps.SpawnMap2();
 	}
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
@@ -270,6 +273,15 @@ void Game_Engine::ApplyForce()
 
 void Game_Engine::Update()
 {
+	switch (_currentState)
+	{
+		case mainMenu:
+			break;
+		case levelSelect:
+			break;
+		case game:
+			break;
+	}
 	PhysicsUpdate();
 	CollisionCheck();
 
@@ -284,7 +296,8 @@ void Game_Engine::Update()
 
 void Game_Engine::Render()
 {
-	this->_window->clear(sf::Color(46, 74, 94)); // clears the frame and sets the color of the _window the rgb value specified
+	this->_window->clear(); // clears the frame and sets the color of the _window the rgb value specified
+	this->_window->draw(_spriteMap); // draws the background texture
 
 	for (int i = 0; i < _objectList.size(); i++) // iterates through the object list and renders each object
 	{

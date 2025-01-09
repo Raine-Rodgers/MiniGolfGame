@@ -7,12 +7,16 @@
 #include "Engine_Tools.h"
 #include "Maps.h"
 
-#include <cstdlib>
-#include <iostream>
-
 class Game_Engine
 {
 private:
+	enum gameState
+	{
+		mainMenu,
+		levelSelect,
+		game,
+	};
+
 	void						initWindow();
 	void						initVariables();
 
@@ -28,17 +32,21 @@ private:
 	Maps						_maps;
 	bool						_isMouseHeld;
 
+	Rigid_Body*					_player;
 
-	Rigid_Body*	_goal;
-	Rigid_Body*	_player;
-
-	sf::Texture _textureBody;
-	sf::Texture _textureHead;
+	sf::Texture					_textureBody;
+	sf::Texture					_textureHead;
+	sf::Texture					_textureMap;
+	sf::Sprite					_spriteMap;
 
 
 	sf::RectangleShape			_rectForTexHead;
 	sf::RectangleShape			_mouseLine;
 	bool						_mouseLineActive;
+
+	int							_strokeCount;
+
+	gameState					_currentState;
 
 	float count;
 

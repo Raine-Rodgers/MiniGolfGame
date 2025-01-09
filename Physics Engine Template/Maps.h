@@ -31,11 +31,12 @@ private:
 	int _activeLVL;
 
 public:
-	void						addToVectorPool(std::vector<Rigid_Body*>& tempVec);
-	int 						getVectorPoolSize() { return _tempObjectTransferPool.size(); }
+	void						AddToVectorPool(std::vector<Rigid_Body*>& tempVec);
+	int 						GetVectorPoolSize() { return _tempObjectTransferPool.size(); }
 
-	void						spawnMap1();
-	void						spawnMap2();
+	void						SpawnMainMenu();
+	void						SpawnMap1();
+	void						SpawnMap2();
 
 	Maps();
 	~Maps();

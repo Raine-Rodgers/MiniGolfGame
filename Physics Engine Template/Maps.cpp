@@ -23,10 +23,6 @@ Maps::Maps()
 	_goal = new Rigid_Body(true, false, 1);
 
 	_activeLVL = 0;
-
-	
-	
-	
 }
 
 Maps::~Maps()
@@ -34,7 +30,7 @@ Maps::~Maps()
 }
 
 
-void Maps::addToVectorPool(std::vector<Rigid_Body*>& tempVec)
+void Maps::AddToVectorPool(std::vector<Rigid_Body*>& tempVec)
 {
 	tempVec.push_back(_wall1);
 	tempVec.push_back(_wall2);
@@ -54,7 +50,7 @@ void Maps::addToVectorPool(std::vector<Rigid_Body*>& tempVec)
 	tempVec.push_back(_goal);
 }
 
-void Maps::spawnMap1()
+void Maps::SpawnMap1()
 {
 	_activeLVL = 1;
 
@@ -68,10 +64,10 @@ void Maps::spawnMap1()
 	_wall3->SetSize({ 550, 40 });
 	_wall4->SetSize({ 40, 830 });
 
-	_wall1->SetColor({ 0, 0, 0, 255 });	  // black
-	_wall2->SetColor({ 255, 0, 0, 255 }); // red
-	_wall3->SetColor({ 0, 255, 0, 255 }); // green
-	_wall4->SetColor({ 0, 0, 255, 255 }); // blue
+    _wall1->SetColor({ 200, 140, 50, 255 }); // wall1 color
+    _wall2->SetColor({ 200, 140, 50, 255 }); // wall2 color
+    _wall3->SetColor({ 200, 140, 50, 255 }); // wall3 color
+    _wall4->SetColor({ 200, 140, 50, 255 }); // wall4 color
 
 	_goal->SetPosition({ 400, 300 });
 	_goal->SetRadius(15);
@@ -85,7 +81,7 @@ void Maps::spawnMap1()
 	
 }
 
-void Maps::spawnMap2()
+void Maps::SpawnMap2()
 {
 	_activeLVL = 2;
 
@@ -103,12 +99,12 @@ void Maps::spawnMap2()
 	_wall5->SetSize({ 300, 40 });
 	_wall6->SetSize({ 300, 40 });
 
-    _wall1->SetColor({ 0, 0, 255, 255 }); // blue
-    _wall2->SetColor({ 0, 0, 255, 255 }); // blue
-    _wall3->SetColor({ 0, 0, 255, 255 }); // blue
-    _wall4->SetColor({ 0, 0, 255, 255 }); // blue
-    _wall5->SetColor({ 0, 0, 255, 255 }); // blue
-    _wall6->SetColor({ 0, 0, 255, 255 }); // blue
+    _wall1->SetColor({ 200, 140, 50, 255 });
+    _wall2->SetColor({ 200, 140, 50, 255 });
+    _wall3->SetColor({ 200, 140, 50, 255 });
+    _wall4->SetColor({ 200, 140, 50, 255 });
+    _wall5->SetColor({ 200, 140, 50, 255 });
+    _wall6->SetColor({ 200, 140, 50, 255 });
 
 	_wall5->SetRotation(60);
 	_wall6->SetRotation(-60);
