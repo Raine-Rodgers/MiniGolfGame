@@ -297,7 +297,7 @@ void Game_Engine::Update()
 		case game:
 			PhysicsUpdate();
 			CollisionCheck();
-			Movement();
+			
 
 			for (int i = 0; i < _objectList.size(); i++)
 			{
@@ -312,6 +312,7 @@ void Game_Engine::Update()
 			_maps.Update();
 			break;
 	}
+	Movement();
 	PollEvents();
 	
 }
