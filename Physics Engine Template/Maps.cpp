@@ -133,7 +133,7 @@ void Maps::SpawnMap1()
     _wall4->SetColor({ 200, 140, 50, 255 }); // wall4 color
 
 	_goal->SetPosition({ 400, 300 });
-	_goal->SetRadius(15);
+	_goal->SetRadius(13);
 
 
 	_wall1->SetRecOrigin();
@@ -173,11 +173,11 @@ void Maps::SpawnMap2()
 	_wall6->SetRotation(-60);
 
 
-	_recObstacle1->SetPosition({ 325, 350 });
-	_recObstacle2->SetPosition({ 325, 350 });
+	_recObstacle1->SetPosition({ 400, 400 });
+	_recObstacle2->SetPosition({ 400, 400 });
 
-	_recObstacle3->SetPosition({ 475, 350 });
-	_recObstacle4->SetPosition({ 475, 350 });
+	_recObstacle3->SetPosition({ 400, 200 });
+	_recObstacle4->SetPosition({ 400, 200 });
 
 	_recObstacle1->SetSize({ 100, 5 });
 	_recObstacle2->SetSize({ 100, 5 });
