@@ -39,12 +39,14 @@ void Game_Engine::initVariables() // basic initialization function
 	_mouseLineActive = false;
 	_mouseLine = sf::RectangleShape(sf::Vector2f(0, 0));
 	_rectForTexHead = sf::RectangleShape(sf::Vector2f(0, 0));
+	_currentStrokeCount = 0;
+	_totalStrokeCount = 0;
 
 
 	_player = new Rigid_Body(false, true, 1);
 	_player->SetSize(sf::Vector2f(20, 50));
 	_player->SetColor(sf::Color::Red);
-	_player->SetPosition(sf::Vector2f(400, 500));
+	_player->SetPosition(sf::Vector2f(400, 700));
 	_player->SetRadius(10);
 	_player->SetOrigin();
 
@@ -62,8 +64,14 @@ void Game_Engine::initVariables() // basic initialization function
 	_textureMap.loadFromFile("Textures/Checker_Board.png");
 	_spriteMap = sf::Sprite(_textureMap);
 
-	count = 1;
-
+	_font = sf::Font();
+	_font.loadFromFile("Fonts/ARCADECLASSIC.TTF");
+	_strokeCountText = sf::Text();
+	_strokeCountText.setFillColor(sf::Color::Black);
+	_strokeCountText.setPosition(50, 900);
+	_strokeCountText.setFont(_font);
+	_strokeCountText.setCharacterSize(30);
+	_strokeCountText.setString("Strokes	 " + std::to_string(_currentStrokeCount));
 
 }
 
@@ -201,6 +209,20 @@ void Game_Engine::CollisionCheck()
 
 }
 
+void Game_Engine::ScoreHandling()
+{
+	if (_engineTools.Distance(_player->GetPosition(), _maps.GetGoalPosition()) <= _maps.GetGoalRadius())
+	{
+		_player->SetVelocity(sf::Vector2f(0, 0));
+		_player->SetPosition(sf::Vector2f(400, 700));
+		_totalStrokeCount += _currentStrokeCount;
+		_currentStrokeCount = 0;
+
+		_maps.SpawnNextLevel();
+		_strokeCountText.setString("Strokes	 " + std::to_string(_currentStrokeCount));
+	}
+}
+
 
 void Game_Engine::Movement()
 {
@@ -227,7 +249,7 @@ void Game_Engine::Movement()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) // random
 	{
-		_maps.SpawnMap2();
+		_maps.SpawnMap3();
 	}
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
@@ -260,6 +282,8 @@ void Game_Engine::Movement()
 			_rectForTexHead.setPosition(_player->GetPosition() + normal * (_mouseDistance*2) / 1.53f); // is this the best way to do it? no. do i care? kinda but i aint fixing all that so we're just gonna deal with it
 			_rectForTexHead.setRotation(std::atan2(normal.y, normal.x) * 180 / 3.141);
 			_rectForTexHead.setTexture(&_textureHead);
+
+
 		}
 	}
 	// see the event queue for the mouse button release
@@ -268,13 +292,26 @@ void Game_Engine::Movement()
 
 void Game_Engine::ApplyForce()
 {
-	//sf::Vector2f(sf::Mouse::getPosition(*_window)) - _player->GetPosition()
-	sf::Vector2f normal = _engineTools.Normalize(sf::Vector2f(sf::Mouse::getPosition(*_window)) - _player->GetPosition());
-	normal = -normal;
-	_player->AddForce({ normal * _mouseDistance * _mouseImpulseDampening }); // apply the impulse to the _player
-	_isMouseHeld = false;
-	_mouseLineActive = false;
-	_mouseDistance = 0;
+	switch (_isMouseHeld)
+	{
+		case false: // ensures that no needless calculations are made whenever i let go of the mouse button
+			break;
+		case true:
+			sf::Vector2f normal = _engineTools.Normalize(sf::Vector2f(sf::Mouse::getPosition(*_window)) - _player->GetPosition()); // creates the normal direction to apply the force to
+			normal = -normal; // inverts the normal so that dragging the mouse down shoots the player up
+			_player->AddForce({ normal * _mouseDistance * _mouseImpulseDampening }); // apply the impulse to the _player
+
+			//// reset all variables ////
+			_isMouseHeld = false;
+			_mouseLineActive = false;
+			_mouseDistance = 0;
+
+			//// handle the stroke counters ////
+			_currentStrokeCount++;
+			_strokeCountText.setString("Strokes	 " + std::to_string(_currentStrokeCount));
+			break;
+	}
+	
 }
 
 void Game_Engine::Update()
@@ -282,7 +319,7 @@ void Game_Engine::Update()
 	switch (_currentState)
 	{
 		case mainMenu:
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) // do the simple checks first to reduce computation time
 			{
 				if (_maps.GetPlayButton()->GetRectangle().getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(*_window).x, sf::Mouse::getPosition(*_window).y)))
 				{
@@ -292,9 +329,9 @@ void Game_Engine::Update()
 				}
 			}
 			break;
-		case levelSelect:
+		case levelSelect: // work in progress
 			break;
-		case game:
+		case game: // dont run all of these complex function unless the actual game is running
 			PhysicsUpdate();
 			CollisionCheck();
 			Movement();
@@ -303,16 +340,11 @@ void Game_Engine::Update()
 			{
 				_objectList[i]->Update(_gravity);
 			}
-
-			if (_engineTools.Distance(_player->GetPosition(), _maps.GetGoalPosition()) <= _maps.GetGoalRadius())
-			{
-				_maps.SpawnMap2();
-			}
-
+			ScoreHandling();
 			_maps.Update();
 			break;
 	}
-	PollEvents();
+	PollEvents(); // always run PollEvents since it handles things like closing the game
 	
 }
 
@@ -343,6 +375,7 @@ void Game_Engine::Render()
 		break;
 	}
 
+	this->_window->draw(_strokeCountText);
 	this->_window->display(); // displayed the frame with the updated information
 }
 

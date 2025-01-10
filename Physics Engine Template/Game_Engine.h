@@ -44,9 +44,13 @@ private:
 	sf::RectangleShape			_mouseLine;
 	bool						_mouseLineActive;
 
-	int							_strokeCount;
+	int							_currentStrokeCount;
+	int							_totalStrokeCount;
 
 	gameState					_currentState;
+
+	sf::Text					_strokeCountText;
+	sf::Font					_font;
 
 	float count;
 
@@ -60,6 +64,7 @@ public:
 	void						PhysicsUpdate();
 	void						CollisionCheck();
 	void						CollisionResolve(int indexShapeA, int indexShapeB, sf::Vector2f normal, float depth);
+	void						ScoreHandling();
 	void						Update();
 	void						Render();
 
