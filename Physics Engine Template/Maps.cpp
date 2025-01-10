@@ -144,9 +144,9 @@ void Maps::SpawnMap1()
 	
 }
 
-void Maps::SpawnMap2()
+void Maps::SpawnMap3()
 {
-	_activeLVL = 2;
+	_activeLVL = 3;
 
 	_wall1->SetPosition({ 400, 800 });
 	_wall2->SetPosition({ 200, 580 });
@@ -204,10 +204,10 @@ void Maps::SpawnMap2()
 	_goal->SetRecOrigin();
 }
 
-void Maps::SpawnMap3()
+void Maps::SpawnMap2()
 {
 
-	_activeLVL = 3;
+	_activeLVL = 2;
 
 	_wall1->SetPosition({ 400, 800 });
 	_wall2->SetPosition({ 300, 580 });
@@ -327,9 +327,7 @@ void Maps::Update()
 {
 	switch (_activeLVL)
 	{
-	case 1:
-		break;
-	case 2:
+	case 3:
 		_recObstacle1->SpinRect(20);
 		_recObstacle2->SpinRect(20);
 		_recObstacle3->SpinRect(-20);

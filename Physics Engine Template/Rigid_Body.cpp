@@ -11,7 +11,7 @@ Rigid_Body::Rigid_Body()
 	this->_terminalVelocity = 20.f;
 	this->_force = sf::Vector2f(0, 0);
 	this->_shapeType = 0;
-	this->_restitution = 3.f; // 3.f is perfect restitution
+	this->_restitution = 2.5f; // 3.f is perfect restitution
 }
 
 Rigid_Body::Rigid_Body(bool lockedPosition, bool collidable, int shapeType)
@@ -24,7 +24,7 @@ Rigid_Body::Rigid_Body(bool lockedPosition, bool collidable, int shapeType)
 	this->_terminalVelocity = 20.f; // havent done anything yet with this
 	this->_force = sf::Vector2f(0, 0);
 	this->_shapeType = shapeType;
-	this->_restitution = 3.f;
+	this->_restitution = 2.5f;
 }
 
 Rigid_Body::Rigid_Body(sf::Vector2f velocity, float mass, float friction, bool lockedPosition, float terminalVelocity, bool collidable, int shapeType, float restitution)
