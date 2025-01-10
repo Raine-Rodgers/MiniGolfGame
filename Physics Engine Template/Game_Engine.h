@@ -39,7 +39,6 @@ private:
 	sf::Texture					_textureMap;
 	sf::Sprite					_spriteMap;
 
-
 	sf::RectangleShape			_rectForTexHead;
 	sf::RectangleShape			_mouseLine;
 	bool						_mouseLineActive;
@@ -51,8 +50,6 @@ private:
 
 	sf::Text					_strokeCountText;
 	sf::Font					_font;
-
-	float count;
 
 
 

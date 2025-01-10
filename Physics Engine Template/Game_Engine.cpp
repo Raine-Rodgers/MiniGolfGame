@@ -42,7 +42,6 @@ void Game_Engine::initVariables() // basic initialization function
 	_currentStrokeCount = 0;
 	_totalStrokeCount = 0;
 
-
 	_player = new Rigid_Body(false, true, 1);
 	_player->SetSize(sf::Vector2f(20, 50));
 	_player->SetColor(sf::Color::Red);
@@ -55,7 +54,6 @@ void Game_Engine::initVariables() // basic initialization function
 	_objectList.push_back(_player);
 	_maps.AddToVectorPool(_objectList);
 
-	std::system("dir");
 	_textureBody = sf::Texture(); // loads the textures for the mouse line
 	_textureBody.loadFromFile("Textures/Arrow_Pointer_Sprite_Body-1.png");
 	_textureHead = sf::Texture();
@@ -87,8 +85,6 @@ void Game_Engine::PollEvents()
 			case sf::Event::KeyPressed:
 				if(this->_event.key.code == sf::Keyboard::Escape)
 					this->_window->close();
-				if (this->_event.key.code == sf::Keyboard::R)
-					_maps.SpawnEndScreen(_totalStrokeCount);
 				break;
 			case sf::Event::MouseButtonReleased:
 				ApplyForce();
@@ -119,15 +115,6 @@ void Game_Engine::CollisionResolve(int indexShapeA, int indexShapeB, sf::Vector2
 
 	sf::Vector2f impulse = j * normal; // calculates the impulse
 
-
-	//if ((!_objectList[indexShapeA]->GetCollidable() || !_objectList[indexShapeB]->GetCollidable())) // if either object is not collidable
-	//{
-	//	return;
-	//}
-	//if (_objectList[indexShapeA]->GetLockedPosition() && _objectList[indexShapeB]->GetLockedPosition()) // if both objects are locked
-	//{
-	//	return;
-	//}
 	if (!(_objectList[indexShapeA]->GetLockedPosition() || _objectList[indexShapeB]->GetLockedPosition())) // if neither object is locked
 	{
 		_objectList[indexShapeA]->SetPosition(_objectList[indexShapeA]->GetPosition() + normal * depth / 2.f); // move each object half the depth
@@ -139,7 +126,6 @@ void Game_Engine::CollisionResolve(int indexShapeA, int indexShapeB, sf::Vector2
 	}
 	if (_objectList[indexShapeA]->GetLockedPosition()) // if object A is locked
 	{
-		//j *= _objectList[indexShapeA]->GetRestitution();
 		_objectList[indexShapeB]->SetPosition(_objectList[indexShapeB]->GetPosition() - normal * depth); // move object B the full depth
 		_objectList[indexShapeB]->SetVelocity(_objectList[indexShapeB]->GetVelocity() + impulse * _objectList[indexShapeB]->_mass);
 
@@ -147,7 +133,6 @@ void Game_Engine::CollisionResolve(int indexShapeA, int indexShapeB, sf::Vector2
 	}
 	if (_objectList[indexShapeB]->GetLockedPosition()) // if object B is locked
 	{
-		//j *= _objectList[indexShapeB]->GetRestitution();
 		_objectList[indexShapeA]->SetPosition(_objectList[indexShapeA]->GetPosition() + normal * depth); // move object A the full depth
 		_objectList[indexShapeA]->SetVelocity(_objectList[indexShapeA]->GetVelocity() - impulse * _objectList[indexShapeA]->_mass);
 
@@ -229,28 +214,6 @@ void Game_Engine::ScoreHandling()
 
 void Game_Engine::Movement()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) // moves the object left
-	{
-		//_player->SetVelocity(sf::Vector2f(_player->GetVelocity().x - 0.5f, _player->GetVelocity().y));
-		_player->AddForce(sf::Vector2f(-0.5f, 0));
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) // moves the object right
-	{
-		_player->AddForce(sf::Vector2f(0.5f, 0));
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) // moves the object up
-	{
-		_player->AddForce(sf::Vector2f(0, -0.5f));
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) // moves the object down
-	{
-		_player->AddForce(sf::Vector2f(0, 0.5f));
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) // resets the velocity of the object
-	{
-		_player->SetVelocity(sf::Vector2f(0, 0));
-	}
-
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
 	{
 		sf::FloatRect _playerBounds = _player->GetCircle().getGlobalBounds(); // assigns a Rect to the _player to ease the process of checking if the mouse is within the bounds of the _player
@@ -333,7 +296,6 @@ void Game_Engine::Update()
 			PhysicsUpdate();
 			CollisionCheck();
 			Movement();
-
 			for (int i = 0; i < _objectList.size(); i++)
 			{
 				_objectList[i]->Update(_gravity);
@@ -361,8 +323,6 @@ void Game_Engine::Render()
 {
 	this->_window->clear(); // clears the frame and sets the color of the _window the rgb value specified
 	this->_window->draw(_spriteMap); // draws the background texture
-
-
 
 	switch (_currentState)
 	{
