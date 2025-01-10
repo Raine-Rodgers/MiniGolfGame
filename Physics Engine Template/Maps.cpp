@@ -230,9 +230,9 @@ void Maps::SpawnMap3()
 	_wall6->SetColor({ 200, 140, 50, 255 });
 
 
-    _recObstacle1->SetPosition({ 430, 250 });
-    _recObstacle2->SetPosition({ 394, 250 });
-    _recObstacle3->SetPosition({ 395, 217 });
+    _recObstacle1->SetPosition({ 450, 240 });
+    _recObstacle2->SetPosition({ 414, 240 });
+    _recObstacle3->SetPosition({ 415, 207 });
 
     _recObstacle1->SetSize({ 70, 5 });
     _recObstacle2->SetSize({ 95, 5 });
