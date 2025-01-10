@@ -87,6 +87,8 @@ void Game_Engine::PollEvents()
 			case sf::Event::KeyPressed:
 				if(this->_event.key.code == sf::Keyboard::Escape)
 					this->_window->close();
+				if (this->_event.key.code == sf::Keyboard::R)
+					_maps.SpawnEndScreen(_totalStrokeCount);
 				break;
 			case sf::Event::MouseButtonReleased:
 				ApplyForce();
@@ -154,6 +156,7 @@ void Game_Engine::CollisionResolve(int indexShapeA, int indexShapeB, sf::Vector2
 }
 
 
+
 void Game_Engine::CollisionCheck()
 {
 	sf::Vector2f normal;
@@ -218,7 +221,7 @@ void Game_Engine::ScoreHandling()
 		_totalStrokeCount += _currentStrokeCount;
 		_currentStrokeCount = 0;
 
-		_maps.SpawnNextLevel();
+		_maps.SpawnNextLevel(_totalStrokeCount);
 		_strokeCountText.setString("Strokes	 " + std::to_string(_currentStrokeCount));
 	}
 }
@@ -246,10 +249,6 @@ void Game_Engine::Movement()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) // resets the velocity of the object
 	{
 		_player->SetVelocity(sf::Vector2f(0, 0));
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) // random
-	{
-		_maps.SpawnMap3();
 	}
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
@@ -325,7 +324,6 @@ void Game_Engine::Update()
 				{
 					_maps.SpawnMap1();
 					_currentState = game;
-					_maps.deleteMenu();
 				}
 			}
 			break;
@@ -342,6 +340,17 @@ void Game_Engine::Update()
 			}
 			ScoreHandling();
 			_maps.Update();
+			switch (_maps.GetActiveLVL())
+			{
+			case 0:
+				_currentState = mainMenu;
+				break;
+			case 4:
+				_currentState = mainMenu;
+				break;
+			default:
+				break;
+			}
 			break;
 	}
 	PollEvents(); // always run PollEvents since it handles things like closing the game
@@ -372,10 +381,10 @@ void Game_Engine::Render()
 			this->_window->draw(_mouseLine);
 			this->_window->draw(_rectForTexHead);
 		}
+		this->_window->draw(_strokeCountText);
 		break;
 	}
 
-	this->_window->draw(_strokeCountText);
 	this->_window->display(); // displayed the frame with the updated information
 }
 

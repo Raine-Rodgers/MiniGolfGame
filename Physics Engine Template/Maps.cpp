@@ -3,11 +3,13 @@
 
 Maps::Maps()
 {
-	_playButton = new Rigid_Body(true, false, 0);
-	_selectLevelButton = new Rigid_Body(true, false, 0);
+	_playButton =			new Rigid_Body(true, false, 0);
+	_selectLevelButton =	new Rigid_Body(true, false, 0);
 
-	_playText = new sf::Text();
-	_selectLevelText = new sf::Text();
+	_playText =				sf::Text();
+	_selectLevelText =		sf::Text();
+	_congradulationsText =	sf::Text();
+	_scoreText =			sf::Text();
 
 	_font = sf::Font();
 	_font.loadFromFile("Fonts/ARCADECLASSIC.TTF");
@@ -38,11 +40,6 @@ Maps::~Maps()
 {
 }
 
-void Maps::deleteMenu()
-{
-	delete _playButton;
-	delete _selectLevelButton;
-}
 
 
 void Maps::AddToVectorPool(std::vector<Rigid_Body*>& tempVec)
@@ -85,19 +82,19 @@ void Maps::SpawnMainMenu()
     _playButton->SetRecOrigin();
     _selectLevelButton->SetRecOrigin();
 
-	_playText->setFont(_font);
-	_selectLevelText->setFont(_font);
-	_playText->setCharacterSize(24);
-	_selectLevelText->setCharacterSize(24);
-	_playText->setFillColor(sf::Color::Black);
-	_selectLevelText->setFillColor(sf::Color::Black);
-	_playText->setString("Play");
-	_selectLevelText->setString("Select Level");
-	_playText->setPosition({ 375, 285 });
-	_selectLevelText->setPosition({ 325, 385 });
+	_playText.setFont(_font);
+	_selectLevelText.setFont(_font);
+	_playText.setCharacterSize(24);
+	_selectLevelText.setCharacterSize(24);
+	_playText.setFillColor(sf::Color::Black);
+	_selectLevelText.setFillColor(sf::Color::Black);
+	_playText.setString("Play");
+	_selectLevelText.setString("Select Level");
+	_playText.setPosition({ 375, 285 });
+	_selectLevelText.setPosition({ 325, 385 });
 }
 
-void Maps::SpawnNextLevel()
+void Maps::SpawnNextLevel(int finalStrokeCount)
 {
 	CleanUp();
 	switch (_activeLVL)
@@ -109,6 +106,9 @@ void Maps::SpawnNextLevel()
 		break;
 	case 2:
 		SpawnMap3();
+		break;
+	case 3:
+		SpawnEndScreen(finalStrokeCount);
 		break;
 	}
 }
@@ -189,6 +189,8 @@ void Maps::SpawnMap2()
 	_recObstacle3->SetRotation(90);
 	_recObstacle4->SetRotation(0);
 
+	_goal->SetPosition({ 400, 300 });
+
 	_wall1->SetRecOrigin();
 	_wall2->SetRecOrigin();
 	_wall3->SetRecOrigin();
@@ -260,6 +262,26 @@ void Maps::SpawnMap3()
 	_goal->SetRecOrigin();
 }
 
+void Maps::SpawnEndScreen(int finalScore)
+{
+	_activeLVL = 4;
+	// Set colors for the buttons
+	_congradulationsText.setFont(_font);
+	_scoreText.setFont(_font);
+
+	_congradulationsText.setCharacterSize(62);
+	_scoreText.setCharacterSize(32);
+
+	_congradulationsText.setFillColor(sf::Color::Black);
+	_scoreText.setFillColor(sf::Color::Black);
+
+	_congradulationsText.setPosition({ 140, 285 });
+	_scoreText.setPosition({ 281, 399 });
+
+	_congradulationsText.setString("Congradulations!");
+	_scoreText.setString("S h o t s      T a k e n      " + std::to_string(finalScore));
+}
+
 void Maps::CleanUp()
 {
     _wall1->SetPosition({ -1000, -1000 });
@@ -278,6 +300,8 @@ void Maps::CleanUp()
     _circObstacle2->SetPosition({ -1000, -1000 });
     _circObstacle3->SetPosition({ -1000, -1000 });
     _circObstacle4->SetPosition({ -1000, -1000 });
+
+	_goal->SetPosition({ -1000, -1000 });
 
     // Reset rotation of all objects to 0
     _wall1->SetRotation(0);
@@ -316,8 +340,17 @@ void Maps::Update()
 
 void Maps::Render(sf::RenderWindow* window)
 {
-	_playButton->Render(window);
-	_selectLevelButton->Render(window);
-	window->draw(*this->_playText);
-	window->draw(*this->_selectLevelText);
+	switch (_activeLVL)
+	{
+	case 0:
+		_playButton->Render(window);
+		_selectLevelButton->Render(window);
+		window->draw(this->_playText);
+		window->draw(this->_selectLevelText);
+		break;
+	case 4:
+		window->draw(this->_congradulationsText);
+		window->draw(this->_scoreText);
+		break;
+	}
 }

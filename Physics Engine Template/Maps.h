@@ -33,9 +33,11 @@ private:
 	std::vector<Rigid_Body*>	_tempObjectTransferPool;
 	int							_activeLVL;
 
-	sf::Text* _playText;
-	sf::Text* _selectLevelText;
-	sf::Font  _font;
+	sf::Text					_playText;
+	sf::Text					_selectLevelText;
+	sf::Text					_congradulationsText;
+	sf::Text					_scoreText;
+	sf::Font					_font;
 
 public:
 
@@ -48,15 +50,15 @@ public:
 	sf::Vector2f				GetGoalPosition()		{ return _goal->GetPosition(); }
 	float						GetGoalRadius()			{ return _goal->GetRadius(); }
 	void						SpawnMainMenu();
-	void						SpawnNextLevel();
+	void						SpawnNextLevel(int finalStrokeCount);
 	void						SpawnMap1();
 	void						SpawnMap2();
 	void						SpawnMap3();
+	void						SpawnEndScreen(int finalScore);
 	void						CleanUp();
 
 	Maps();
 	~Maps();
-	void deleteMenu();
 
 	void Update();
 	void Render(sf::RenderWindow* window);
