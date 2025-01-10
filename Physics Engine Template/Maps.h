@@ -48,8 +48,11 @@ public:
 	sf::Vector2f				GetGoalPosition()		{ return _goal->GetPosition(); }
 	float						GetGoalRadius()			{ return _goal->GetRadius(); }
 	void						SpawnMainMenu();
+	void						SpawnNextLevel();
 	void						SpawnMap1();
 	void						SpawnMap2();
+	void						SpawnMap3();
+	void						CleanUp();
 
 	Maps();
 	~Maps();

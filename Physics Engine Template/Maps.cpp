@@ -97,6 +97,22 @@ void Maps::SpawnMainMenu()
 	_selectLevelText->setPosition({ 325, 385 });
 }
 
+void Maps::SpawnNextLevel()
+{
+	CleanUp();
+	switch (_activeLVL)
+	{
+	case 0:
+		break;
+	case 1:
+		SpawnMap2();
+		break;
+	case 2:
+		SpawnMap3();
+		break;
+	}
+}
+
 void Maps::SpawnMap1()
 {
 	_activeLVL = 1;
@@ -184,6 +200,102 @@ void Maps::SpawnMap2()
 	_recObstacle3->SetRecOrigin();
 	_recObstacle4->SetRecOrigin();
 	_goal->SetRecOrigin();
+}
+
+void Maps::SpawnMap3()
+{
+
+	_activeLVL = 3;
+
+	_wall1->SetPosition({ 400, 800 });
+	_wall2->SetPosition({ 300, 580 });
+	_wall3->SetPosition({ 270, 160 });
+	_wall4->SetPosition({ 500, 480 });
+
+	_wall5->SetPosition({ 40, 265 });
+	_wall6->SetPosition({ 180, 370 });
+
+	_wall1->SetSize({ 240, 40 });
+	_wall2->SetSize({ 40, 400 });
+	_wall3->SetSize({ 500, 40 });
+	_wall4->SetSize({ 40, 600 });
+	_wall5->SetSize({ 40, 250 });
+	_wall6->SetSize({ 280, 40 });
+
+	_wall1->SetColor({ 200, 140, 50, 255 });
+	_wall2->SetColor({ 200, 140, 50, 255 });
+	_wall3->SetColor({ 200, 140, 50, 255 });
+	_wall4->SetColor({ 200, 140, 50, 255 });
+	_wall5->SetColor({ 200, 140, 50, 255 });
+	_wall6->SetColor({ 200, 140, 50, 255 });
+
+
+    _recObstacle1->SetPosition({ 430, 250 });
+    _recObstacle2->SetPosition({ 394, 250 });
+    _recObstacle3->SetPosition({ 395, 217 });
+
+    _recObstacle1->SetSize({ 70, 5 });
+    _recObstacle2->SetSize({ 95, 5 });
+    _recObstacle3->SetSize({ 70, 5 });
+
+    _recObstacle1->SetRotation(90);
+    _recObstacle2->SetRotation(45);
+    _recObstacle3->SetRotation(0);
+
+	_recObstacle1->SetColor(sf::Color::White);
+	_recObstacle2->SetColor(sf::Color::White);
+	_recObstacle3->SetColor(sf::Color::White);
+
+	_goal->SetPosition({ 150, 260 });
+
+	_wall1->SetRecOrigin();
+	_wall2->SetRecOrigin();
+	_wall3->SetRecOrigin();
+	_wall4->SetRecOrigin();
+	_wall5->SetRecOrigin();
+	_wall6->SetRecOrigin();
+	_recObstacle1->SetRecOrigin();
+	_recObstacle2->SetRecOrigin();
+	_recObstacle3->SetRecOrigin();
+	_goal->SetRecOrigin();
+}
+
+void Maps::CleanUp()
+{
+    _wall1->SetPosition({ -1000, -1000 });
+    _wall2->SetPosition({ -1000, -1000 });
+    _wall3->SetPosition({ -1000, -1000 });
+    _wall4->SetPosition({ -1000, -1000 });
+    _wall5->SetPosition({ -1000, -1000 });
+    _wall6->SetPosition({ -1000, -1000 });
+
+    _recObstacle1->SetPosition({ -1000, -1000 });
+    _recObstacle2->SetPosition({ -1000, -1000 });
+    _recObstacle3->SetPosition({ -1000, -1000 });
+    _recObstacle4->SetPosition({ -1000, -1000 });
+
+    _circObstacle1->SetPosition({ -1000, -1000 });
+    _circObstacle2->SetPosition({ -1000, -1000 });
+    _circObstacle3->SetPosition({ -1000, -1000 });
+    _circObstacle4->SetPosition({ -1000, -1000 });
+
+    // Reset rotation of all objects to 0
+    _wall1->SetRotation(0);
+    _wall2->SetRotation(0);
+    _wall3->SetRotation(0);
+    _wall4->SetRotation(0);
+    _wall5->SetRotation(0);
+    _wall6->SetRotation(0);
+    
+    _recObstacle1->SetRotation(0);
+    _recObstacle2->SetRotation(0);
+    _recObstacle3->SetRotation(0);
+    _recObstacle4->SetRotation(0);
+    
+    _circObstacle1->SetRotation(0);
+    _circObstacle2->SetRotation(0);
+    _circObstacle3->SetRotation(0);
+    _circObstacle4->SetRotation(0);
 }
 
 
